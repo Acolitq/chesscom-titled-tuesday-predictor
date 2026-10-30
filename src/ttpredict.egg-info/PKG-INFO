@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: ttpredict
+Version: 0.1.0
+Summary: Predict Titled Tuesday game outcomes from pre-game information
+Requires-Python: >=3.11

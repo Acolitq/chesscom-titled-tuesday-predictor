@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/ttpredict/__init__.py
+src/ttpredict/api.py
+src/ttpredict/collect.py
+src/ttpredict/config.py
+src/ttpredict/discover.py
+src/ttpredict.egg-info/PKG-INFO
+src/ttpredict.egg-info/SOURCES.txt
+src/ttpredict.egg-info/dependency_links.txt
+src/ttpredict.egg-info/top_level.txt

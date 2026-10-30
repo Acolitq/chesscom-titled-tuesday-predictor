@@ -12,7 +12,7 @@ API_BASE = "https://api.chess.com/pub"
 # Chess.com asks API users to send an identifying User-Agent.
 USER_AGENT = "titled-tuesday-outcome-model/0.1 (chess.com internship take-home)"
 
-# Every weekly Titled Tuesday (blitz, 3+0... in practice 5+0 in 2026) from
+# Every weekly Titled Tuesday (blitz; the API reports time_control "300") from
 # January through March 2026, in chronological order. The list was discovered
 # from players' /pub/player/{user}/tournaments endpoints (see
 # `python -m ttpredict.discover`) and is pinned here so the dataset is fixed.
