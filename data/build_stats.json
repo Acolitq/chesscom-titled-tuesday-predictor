@@ -1,0 +1,14 @@
+{
+  "n_games": 24786,
+  "n_history_games": 399401,
+  "draw_prior": 0.08802747690429637,
+  "n_closed_accounts": 0,
+  "exclusions": {
+    "kept": 24629,
+    "no_pre_rating": 157
+  },
+  "pre_rating_check": {
+    "n_compared": 43827,
+    "agreement": 0.99977
+  }
+}

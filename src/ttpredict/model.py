@@ -74,12 +74,12 @@ def candidate_models() -> dict[str, tuple[list[str], object, list[dict]]]:
     gbm = HistGradientBoostingClassifier(random_state=RANDOM_STATE, early_stopping=False)
     gbm_grid = [
         dict(zip(("learning_rate", "max_iter", "max_leaf_nodes", "min_samples_leaf", "l2_regularization"), v))
-        for v in itertools.product([0.03, 0.1], [100, 300], [7, 15], [50, 200], [0.0, 1.0])
+        for v in itertools.product([0.01, 0.03, 0.1], [100, 300], [3, 7, 15], [50, 200], [0.0, 1.0])
     ]
     return {
         "prior": (ELO_COLUMNS, DummyClassifier(strategy="prior"), [{}]),
-        "elo_logreg": (ELO_COLUMNS, clone(logreg), [{"logisticregression__C": c} for c in (0.01, 1.0)]),
-        "logreg": (FEATURE_COLUMNS, clone(logreg), [{"logisticregression__C": c} for c in (0.01, 0.1, 1.0, 10.0)]),
+        "elo_logreg": (ELO_COLUMNS, clone(logreg), [{"logisticregression__C": c} for c in (0.001, 0.01, 0.1, 1.0)]),
+        "logreg": (FEATURE_COLUMNS, clone(logreg), [{"logisticregression__C": c} for c in (0.001, 0.01, 0.1, 1.0, 10.0)]),
         "gbm": (FEATURE_COLUMNS, gbm, gbm_grid),
     }
 
