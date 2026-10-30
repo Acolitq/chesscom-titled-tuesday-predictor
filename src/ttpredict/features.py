@@ -187,3 +187,49 @@ def build_features(games: pd.DataFrame, history: pd.DataFrame, draw_prior: float
     out["points_diff"] = out["points_white"] - out["points_black"]
     out["points_mean"] = (out["points_white"] + out["points_black"]) / 2
     return out
+
+
+def closed_accounts() -> set[str]:
+    """Players whose archives returned 404/410 (account closed since)."""
+    from .archives import ARCHIVE_DIR
+
+    closed = set()
+    for path in ARCHIVE_DIR.glob("*/*.json"):
+        if '"missing": true' in path.read_text(encoding="utf-8")[:32]:
+            closed.add(path.parent.name)
+    return closed
+
+
+def main() -> None:
+    from .archives import HISTORY_CSV
+
+    games = pd.read_csv(GAMES_CSV, dtype={"game_id": str})
+    history = pd.read_csv(HISTORY_CSV, dtype={"game_id": str})
+
+    # Shrinkage target for draw rates: the blitz draw rate among games that
+    # ended before the first tournament, i.e. before anything we model.
+    before = history[history["end_time"] < games["t_start_time"].min()]
+    is_draw = before["white_result"].isin(DRAW_CODES) & before["black_result"].isin(DRAW_CODES)
+    draw_prior = float(is_draw.mean())
+    print(f"draw prior from {len(before)} earlier blitz games: {draw_prior:.4f}")
+
+    out = build_features(games, history, draw_prior)
+
+    # A player whose account was closed after the event has no archive. Any
+    # imputed value for them would encode "this account was later closed" —
+    # information from the future (often a fair-play ban) — so those games are
+    # excluded from modelling rather than imputed.
+    closed = closed_accounts()
+    out["exclude_reason"] = ""
+    no_rating = out["white_pre"].isna() | out["black_pre"].isna()
+    out.loc[no_rating, "exclude_reason"] = "no_pre_rating"
+    out.loc[out["white"].isin(closed) | out["black"].isin(closed), "exclude_reason"] = "closed_account"
+    print(f"closed accounts: {len(closed)}")
+    print(out["exclude_reason"].replace("", "kept").value_counts().to_string())
+
+    out.to_csv(FEATURES_CSV, index=False, lineterminator="\n", float_format="%.6g")
+    print(f"wrote {len(out)} rows to {FEATURES_CSV}")
+
+
+if __name__ == "__main__":
+    main()
