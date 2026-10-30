@@ -20,12 +20,15 @@ the present and the future and asserting that features do not move.
 
 from __future__ import annotations
 
+import json
+
 import numpy as np
 import pandas as pd
 
 from .config import DATA_DIR, GAMES_CSV
 
 FEATURES_CSV = DATA_DIR / "features.csv"
+STATS_JSON = DATA_DIR / "build_stats.json"
 WINDOW_S = 30 * 24 * 3600  # recent-form window before the tournament start
 DRAW_PRIOR_GAMES = 20  # pseudo-games used to shrink each player's draw rate
 
@@ -227,8 +230,38 @@ def main() -> None:
     print(f"closed accounts: {len(closed)}")
     print(out["exclude_reason"].replace("", "kept").value_counts().to_string())
 
+    stats = {
+        "n_games": len(out),
+        "n_history_games": len(history),
+        "draw_prior": draw_prior,
+        "n_closed_accounts": len(closed),
+        "exclusions": out["exclude_reason"].replace("", "kept").value_counts().to_dict(),
+        "pre_rating_check": check_pre_ratings(out),
+    }
+    print(f"pre-rating check: {stats['pre_rating_check']}")
+    STATS_JSON.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
+
     out.to_csv(FEATURES_CSV, index=False, lineterminator="\n", float_format="%.6g")
     print(f"wrote {len(out)} rows to {FEATURES_CSV}")
+
+
+def check_pre_ratings(out: pd.DataFrame) -> dict:
+    """Sanity check on real data: for a player who also played the previous
+    round of the same event, the pre-game rating should equal their post-game
+    rating from that previous round (no other blitz game fits in between)."""
+    sides = []
+    for side in ("white", "black"):
+        sides.append(
+            out[["tournament", "round", side, f"{side}_pre", f"{side}_rating_post"]].set_axis(
+                ["tournament", "round", "player", "pre", "post"], axis=1
+            )
+        )
+    long = pd.concat(sides, ignore_index=True)
+    prev = long[["tournament", "round", "player", "post"]].assign(round=long["round"] + 1)
+    both = long.merge(prev, on=["tournament", "round", "player"], suffixes=("", "_prev_round"))
+    both = both[both["pre"].notna()]
+    agree = both["pre"] == both["post_prev_round"]
+    return {"n_compared": int(len(both)), "agreement": round(float(agree.mean()), 5)}
 
 
 if __name__ == "__main__":
