@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# Raw API responses are cached locally and can be re-downloaded; the compact
+# processed dataset (data/games.csv) is committed for reproducibility.
+data/raw/

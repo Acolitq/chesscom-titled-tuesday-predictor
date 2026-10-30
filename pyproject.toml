@@ -1,0 +1,9 @@
+[project]
+name = "ttpredict"
+version = "0.1.0"
+description = "Predict Titled Tuesday game outcomes from pre-game information"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
