@@ -20,7 +20,7 @@ python run.py
 ```
 
 `python run.py` trains and evaluates every model from the committed
-`data/features.csv` and writes `reports/` (≈ 10–15 minutes on a laptop, almost
+`data/features.csv` and writes `reports/` (≈ 5–15 minutes on a laptop, almost
 all of it hyper-parameter search and bootstrap). Run the tests with
 `python -m pytest`.
 

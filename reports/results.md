@@ -37,6 +37,16 @@ Per test tournament log loss:
 | titled-tuesday-blitz-march-24-2026-6292855 | 0.8294 | 0.8251 |
 | titled-tuesday-blitz-march-31-2026-6322539 | 0.8250 | 0.8190 |
 
+Per-class one-vs-rest ROC AUC, and the draw rate among the 10% of test games with the highest predicted draw probability:
+
+| model | AUC black_win | AUC draw | AUC white_win | draw rate, top decile of P(draw) |
+|---|---|---|---|---|
+| elo_logreg | 0.772 | 0.577 | 0.769 | 0.123 |
+| logreg | 0.772 | 0.601 | 0.770 | 0.164 |
+| gbm | 0.773 | 0.591 | 0.770 | 0.156 |
+
+Base draw rate on test: 0.089.
+
 Permutation importance (test log-loss increase):
 
 * `rating_diff`: +0.3160

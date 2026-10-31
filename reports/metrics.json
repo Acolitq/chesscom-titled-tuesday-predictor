@@ -1087,6 +1087,82 @@
       "logreg": 0.8190249033557635
     }
   },
+  "draw_analysis": {
+    "elo_logreg": {
+      "auc": {
+        "black_win": 0.7717050265365559,
+        "draw": 0.5767256168665408,
+        "white_win": 0.7685055127936512
+      },
+      "draw_rate_top_decile": 0.12278308321964529,
+      "max_p_draw": 0.10939910071693333
+    },
+    "logreg": {
+      "auc": {
+        "black_win": 0.7721578400782432,
+        "draw": 0.60143942404173,
+        "white_win": 0.7699702841522422
+      },
+      "draw_rate_top_decile": 0.1643646408839779,
+      "max_p_draw": 0.26399113818154035
+    },
+    "gbm": {
+      "auc": {
+        "black_win": 0.7730904863413588,
+        "draw": 0.5914293664671266,
+        "white_win": 0.769607987286604
+      },
+      "draw_rate_top_decile": 0.15607734806629833,
+      "max_p_draw": 0.33772703596648607
+    }
+  },
+  "by_round": {
+    "1": {
+      "draw_rate": 0.06100682593856655,
+      "median_abs_rating_diff": 404.0
+    },
+    "2": {
+      "draw_rate": 0.07817969661610269,
+      "median_abs_rating_diff": 316.0
+    },
+    "3": {
+      "draw_rate": 0.07364341085271318,
+      "median_abs_rating_diff": 255.0
+    },
+    "4": {
+      "draw_rate": 0.08788598574821853,
+      "median_abs_rating_diff": 233.0
+    },
+    "5": {
+      "draw_rate": 0.0850354314297624,
+      "median_abs_rating_diff": 216.0
+    },
+    "6": {
+      "draw_rate": 0.07281344248168893,
+      "median_abs_rating_diff": 200.0
+    },
+    "7": {
+      "draw_rate": 0.09283461018476791,
+      "median_abs_rating_diff": 186.0
+    },
+    "8": {
+      "draw_rate": 0.09224219489120151,
+      "median_abs_rating_diff": 177.0
+    },
+    "9": {
+      "draw_rate": 0.09902011346054668,
+      "median_abs_rating_diff": 168.0
+    },
+    "10": {
+      "draw_rate": 0.09467455621301775,
+      "median_abs_rating_diff": 162.0
+    },
+    "11": {
+      "draw_rate": 0.099601593625498,
+      "median_abs_rating_diff": 158.0
+    }
+  },
+  "n_no_shows_test": 164,
   "leaky_post_game_rating_model": {
     "log_loss": 0.7694980855421868,
     "brier": 0.4443045715572698,
