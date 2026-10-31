@@ -63,7 +63,7 @@ def get_json(url: str, *, use_cache: bool = True) -> dict:
         return json.loads(path.read_text(encoding="utf-8"))
     data = fetch(url)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data), encoding="utf-8")
+    path.write_text(json.dumps(data), encoding="utf-8", newline="\n")
     return data
 
 

@@ -239,7 +239,7 @@ def main() -> None:
         "pre_rating_check": check_pre_ratings(out),
     }
     print(f"pre-rating check: {stats['pre_rating_check']}")
-    STATS_JSON.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
+    STATS_JSON.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     out.to_csv(FEATURES_CSV, index=False, lineterminator="\n", float_format="%.6g")
     print(f"wrote {len(out)} rows to {FEATURES_CSV}")

@@ -61,7 +61,7 @@ def fetch_month(user: str, year: int, month: int) -> list[dict]:
     data = fetch(f"{API_BASE}/player/{user}/games/{year:04d}/{month:02d}", missing_ok=True)
     games = [] if data is None else [s for g in data.get("games", []) if (s := _slim(g))]
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"missing": data is None, "games": games}), encoding="utf-8")
+    path.write_text(json.dumps({"missing": data is None, "games": games}), encoding="utf-8", newline="\n")
     return games
 
 

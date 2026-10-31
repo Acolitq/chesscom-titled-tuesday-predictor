@@ -252,6 +252,21 @@ def run() -> dict:
         for t in TEST_TOURNAMENTS
         if (m := (test["tournament"] == t).to_numpy()).any()
     }
+    report["draw_analysis"] = {}
+    for name in ("elo_logreg", "logreg", "gbm"):
+        p_draw = probs[name][:, 1]
+        top = p_draw >= np.quantile(p_draw, 0.9)
+        report["draw_analysis"][name] = {
+            "auc": {c: float(roc_auc_score(y_test == k, probs[name][:, k])) for k, c in enumerate(CLASSES)},
+            "draw_rate_top_decile": float((y_test[top] == 1).mean()),
+            "max_p_draw": float(p_draw.max()),
+        }
+    both = pd.concat([train, test])
+    report["by_round"] = {
+        int(r): {"draw_rate": float((g["y"] == 1).mean()), "median_abs_rating_diff": float(g["abs_rating_diff"].median())}
+        for r, g in both.groupby("round")
+    }
+    report["n_no_shows_test"] = int((~played).sum())
     report["leaky_post_game_rating_model"] = leaky_demo(train.copy(), test.copy())
 
     cols, model = fitted[best_name]
@@ -268,7 +283,7 @@ def run() -> dict:
     plot_calibration(y_test, probs[best_name], REPORTS_DIR / "calibration.png")
     plot_confusion(y_test, probs[best_name], REPORTS_DIR / "confusion_matrix.png")
     plot_importance(importance, REPORTS_DIR / "permutation_importance.png")
-    (REPORTS_DIR / "metrics.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    (REPORTS_DIR / "metrics.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8", newline="\n")
     write_markdown(report)
     return report
 
@@ -325,9 +340,22 @@ def write_markdown(r: dict) -> None:
     ]
     for t, v in r["per_tournament_log_loss"].items():
         lines.append(f"| {t} | " + " | ".join(f"{x:.4f}" for x in v.values()) + " |")
+    lines += [
+        "",
+        "Per-class one-vs-rest ROC AUC, and the draw rate among the 10% of test games with the highest "
+        "predicted draw probability:",
+        "",
+        "| model | " + " | ".join(f"AUC {c}" for c in CLASSES) + " | draw rate, top decile of P(draw) |",
+        "|---|---|---|---|---|",
+    ]
+    for name, d in r["draw_analysis"].items():
+        lines.append(
+            f"| {name} | " + " | ".join(f"{d['auc'][c]:.3f}" for c in CLASSES) + f" | {d['draw_rate_top_decile']:.3f} |"
+        )
+    lines += ["", f"Base draw rate on test: {r['class_balance']['test']['draw']:.3f}."]
     lines += ["", "Permutation importance (test log-loss increase):", ""]
     lines += [f"* `{k}`: {v:+.4f}" for k, v in r["permutation_importance"].items()]
-    (REPORTS_DIR / "results.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (REPORTS_DIR / "results.md").write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
