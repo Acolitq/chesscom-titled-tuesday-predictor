@@ -245,16 +245,16 @@ small contributions from activity, draw tendency and form. `trend_*` and
 ## 8. Time spent and AI usage
 
 The project was built with **Claude Code** (Anthropic's coding agent) driving
-the implementation. The full agent transcript accompanies this submission.
-Approximate wall-clock split of the agent session:
+the implementation, followed by my own review. The agent transcript is in
+[transcripts/claude-code-session.md](transcripts/claude-code-session.md).
 
 | part | time |
 |---|---|
+| **Agent session** | **≈ 2 h** |
 | Reading the brief, exploring the API, project setup | ~15 min |
 | Data collection and discovering the post-game-rating leak | ~15 min |
 | Archive download design, features, leakage tests, modelling code | ~30 min (while the ~45 min archive download ran) |
 | Real-data run, validation checks, grid widening, fresh-clone reproduction | ~40 min |
 | Report | ~20 min |
-
-Total ≈ 2 hours of active session time, plus unattended download and training
-runs.
+| **My review** of the code, methodology, results and write-up | **≈ 2 h** |
+| **Total** | **≈ 4 h**, plus unattended download and training runs |

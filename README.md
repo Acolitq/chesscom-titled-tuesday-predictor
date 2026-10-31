@@ -5,6 +5,7 @@ result of a Titled Tuesday game (White win / draw / Black win) using only
 information available **before the game starts**.
 
 **→ The write-up (decisions, results, honest assessment, next steps) is in [REPORT.md](REPORT.md).**
+The AI agent transcript is in [transcripts/claude-code-session.md](transcripts/claude-code-session.md).
 Auto-generated numbers are in [reports/results.md](reports/results.md) and
 [reports/metrics.json](reports/metrics.json).
 
